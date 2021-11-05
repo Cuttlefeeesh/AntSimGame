@@ -1,0 +1,18 @@
+Clicking on a nest adds an ant to the queue if there is enough food in the nest
+indicate the amount of food in the nest somehow
+right click on the nest to make it auto-spawn whenever there is enough food
+
+Clicking anywhere else spawns food
+
+ants wander randomly until they detect food
+what is their food/pheromone detection radius?
+ants can carry 1/5 of a new-ant worth of food (1 pixel?)
+store food in the green channel of color (don't merge with background)
+
+two pheromones: searching for food and reporting food
+they fade over time (same rate??)
+Ants with food turn towards searching for food pheromone
+ants without food turn towards reporting food pheromones
+there is still a little wiggle to their walk so they optimize the path
+
+later todos: obstacles for them to go around? more ant nests to fight? starvation?
