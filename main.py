@@ -3,12 +3,6 @@ from pygame.locals import RESIZABLE
 import AntClass as Ant
 
 
-# This is a sample Python script.
-
-# Press Shift+F10 to execute it or replace it with your code.
-# Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
-
-
 class AntGame:
     """
     Contains the game
@@ -41,7 +35,7 @@ class Model:
         self.burrowlist = Ant.BurrowList()
 
         # start with one nest
-        Ant.AntBurrow([100, 100], self)
+        Ant.AntBurrow([100, 100], game, self)
 
     def update(self):
         for ant in self.antlist:
@@ -68,7 +62,7 @@ class View:
     def update(self):
         self.draw_background()
         self.draw_ants()
-        #self.draw_burrows()
+        self.draw_burrows()
         pygame.display.flip()  # draw everything that's been put on the screen
 
     def draw_background(self):
@@ -77,8 +71,7 @@ class View:
     def draw_ants(self):
         ant_array = pygame.PixelArray(self.screen)
         for ant in self.game.model.antlist:
-            print(ant.pos)
-            ant_array[ant.pos[0]:ant.pos[0] + ant.size, ant.pos[1]:ant.pos[1] + ant.size] = self.antcolor
+            ant_array[ant.pos[0]:min(ant.pos[0] + ant.size, self.width), ant.pos[1]:min(ant.pos[1] + ant.size, self.height)] = self.antcolor
         ant_array.close()  # have to close or the screen surface is locked
 
     def draw_burrows(self):

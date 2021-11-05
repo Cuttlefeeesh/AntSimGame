@@ -8,19 +8,20 @@ class Ant(pygame.sprite.Sprite):
     a little bug that brings home the bacon
     """
 
-    def __init__(self, pos, model):
+    def __init__(self, pos, model, game):
         """
         :param pos: [x, y] pixel position
         """
-        pygame.sprite.Sprite.__init__(self, model)  # adds to antlist
+        pygame.sprite.Sprite.__init__(self, model.antlist)  # adds to antlist
         self.pos = np.array(pos)  # [x, y] used for graphing
         self.xpos = self.pos  # [x,y] used for smooth motion, float
         self.size = 2
         self.model = model
+        self.game = game
         self.speed = 2  # pixels moved per tick
         self.velocity = np.array([0, 0])  # [x,y]
 
-    def wander(self):
+    def wander(self, game):
         """
         searching for food. random walk.
         """
@@ -28,8 +29,12 @@ class Ant(pygame.sprite.Sprite):
         self.velocity = np.add(self.velocity, velchange) # add to velocity
         speed = np.linalg.norm(self.velocity) # magnitude of the velocity
         if speed > self.speed:
-            self.velocity = self.velocity * (self.speed/speed)
-        # if velocity has exceeded top speed, cap it at top speed
+            self.velocity = self.velocity * (self.speed/speed) # if velocity has exceeded top speed, cap it at top speed
+
+        if self.xpos[0] + self.velocity[0] >= game.view.width or self.xpos[0]+ self.velocity[0] <= 0:
+            self.velocity[0] = -1* self.velocity[0]
+        if self.xpos[1] + self.velocity[1] >= game.view.height or self.xpos[1] + self.velocity[1] <= 0:
+            self.velocity[1] = -1 * self.velocity[1]
 
     def move(self):
         """
@@ -48,7 +53,7 @@ class Ant(pygame.sprite.Sprite):
         state machine to determine behavior
         updates position of ant
         """
-        self.wander()
+        self.wander(self.game)
         self.move()
 
 
@@ -57,7 +62,7 @@ class AntBurrow(pygame.sprite.Sprite):
     stores food and spawns ants
     """
 
-    def __init__(self, pos, model):
+    def __init__(self, pos, game, model):
         """
         :param pos: [x,y] pixel position
         """
@@ -66,6 +71,7 @@ class AntBurrow(pygame.sprite.Sprite):
         self.y = pos[1]
         self.size = 7  # length of side in pixels
         self.model = model
+        self.game = game
 
         self.spawn_ant()  # start with one ant
 
@@ -73,7 +79,7 @@ class AntBurrow(pygame.sprite.Sprite):
         """
         returns an instance of the ant class
         """
-        return Ant([self.x, self.y], self.model.antlist)
+        return Ant([self.x, self.y], self.model, self.game)
 
 
 class AntList(pygame.sprite.Group):
