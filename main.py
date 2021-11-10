@@ -1,6 +1,7 @@
 import pygame
 from pygame.locals import RESIZABLE
 import AntClass as Ant
+import numpy as np
 
 
 class AntGame:
@@ -59,8 +60,11 @@ class View:
         self.antcolor = (10, 10, 10)  # ant color
         self.burrowcolor = (77, 44, 12)  # burrow color
 
+        self.draw_background() # todo remove
+
     def update(self):
-        self.draw_background()
+        #self.draw_background()
+        self.draw_pheromones()
         self.draw_ants()
         self.draw_burrows()
         pygame.display.flip()  # draw everything that's been put on the screen
@@ -80,6 +84,32 @@ class View:
             burrow_array[burrow.x:burrow.x + burrow.size, burrow.y:burrow.y + burrow.size] = self.burrowcolor
         burrow_array.close()
 
+    def draw_pheromones(self, game):
+        array = pygame.PixelArray(self.screen)
+        pheromones = np.array(array)
+
+        """
+        #pixel by pixel update: slow and it's hard to convert colors
+        array[150:155, 150:155] = (255,0,0)
+
+        ph_list=[]
+        for i in range(pheromones.shape[0]):
+            for j in range(pheromones.shape[1]):
+                ph_list.append(self.screen.unmap_rgb(pheromones[i,j]))
+        ph_array = np.asarray(ph_list).reshape((self.width,self.height,4))
+        red_array = ph_array[:,:,0]/255 # convert to 0 to 1 scale
+        red_array = red_array - 0.1*np.ones(red_array.shape) #subtract a bit
+
+        red_array = red_array*255 # return to 255 scale
+        final_array = np.zeros(pheromones.shape)
+        for i in range(pheromones.shape[0]):
+            for j in range(pheromones.shape[1]):
+                final_array[i,j] = self.screen.map_rgb(ph_array[i,j,0], ph_array[i,j,1], red_array[i,j])
+
+        array[0:pheromones.shape[0], 0:pheromones.shape[1]] = final_array
+        """
+
+        array.close()
 
 class Controller:
     """
