@@ -1,6 +1,7 @@
 import pygame
 from pygame.locals import RESIZABLE
 import AntClass as Ant
+import AntPheromoneClass as ph
 import numpy as np
 
 
@@ -11,8 +12,8 @@ class AntGame:
 
     def __init__(self):
         pygame.init()
+        self.view = View(self) # needs to be initialized before the model
         self.model = Model(self)
-        self.view = View(self)
         self.controller = Controller()
         self.clock = pygame.time.Clock()
         self.done = False
@@ -34,6 +35,7 @@ class Model:
     def __init__(self, game):
         self.antlist = Ant.AntList()
         self.burrowlist = Ant.BurrowList()
+        self.pheromones = ph.AntPheromone(game.view.width,game.view.height)
 
         # start with one nest
         Ant.AntBurrow([100, 100], game, self)
@@ -57,14 +59,14 @@ class View:
 
         # initialize colors
         self.bkgcolor = (200, 200, 200)  # background color
-        self.antcolor = (10, 10, 10)  # ant color
+        self.antcolor = (250, 250, 250)  # ant color
         self.burrowcolor = (77, 44, 12)  # burrow color
 
         self.draw_background() # todo remove
 
     def update(self):
         #self.draw_background()
-        self.draw_pheromones()
+        self.draw_pheromones(self.game)
         self.draw_ants()
         self.draw_burrows()
         pygame.display.flip()  # draw everything that's been put on the screen
@@ -85,8 +87,8 @@ class View:
         burrow_array.close()
 
     def draw_pheromones(self, game):
-        array = pygame.PixelArray(self.screen)
-        pheromones = np.array(array)
+        array = game.model.pheromones.array
+        pygame.surfarray.blit_array(game.view.screen, array)
 
         """
         #pixel by pixel update: slow and it's hard to convert colors
@@ -109,7 +111,7 @@ class View:
         array[0:pheromones.shape[0], 0:pheromones.shape[1]] = final_array
         """
 
-        array.close()
+        #array.close()
 
 class Controller:
     """
@@ -131,6 +133,8 @@ class Controller:
                 window.view.screen = pygame.display.set_mode((event.w, event.h), RESIZABLE)
                 window.view.width = event.w
                 window.view.height = event.h
+                window.model.pheromones.resize(event.w,event.h)
+
 
 
 

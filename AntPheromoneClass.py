@@ -9,12 +9,10 @@ class AntPheromone:
     An array that contains the concentration of a pheromone at every pixel
     """
 
-    def __init__(self, name, width, height):
+    def __init__(self, width, height):
         """
-        :param name: string name
         #:param game: game class
         """
-        self.name = name
         self.width = width
         self.height = height
         self.array = np.zeros((width, height, 3))
@@ -63,7 +61,7 @@ class AntPheromone:
 if __name__ == '__main__':
     done: bool = False
     screen = pygame.display.set_mode((500, 500),RESIZABLE)
-    ph = AntPheromone("test", 500, 500)
+    ph = AntPheromone(500, 500)
     ph.draw([(10, 10), (10, 11), (11, 10), (11, 11)], (255, 255, 255))
     i = 0
     while not done:
@@ -77,8 +75,10 @@ if __name__ == '__main__':
         ph.decay()
         ph.draw([(np.random.randint(0, 500), np.random.randint(0, 500))],
                 (np.random.randint(0, 256), np.random.randint(0, 256), np.random.randint(0, 256)))
-        if i < 500:
-            ph.draw([(i, 15)], (255, 255, 255))
+        if i < ph.width:
+            ph.draw([(i, 15)], (255, 0, 0))
+            ph.draw([(i, 16)], (0, 255, 0))
+            ph.draw([(i, 17)], (0, 0, 255))
         i = i + 1
         pygame.surfarray.blit_array(screen, ph.array)
         pygame.display.flip()
