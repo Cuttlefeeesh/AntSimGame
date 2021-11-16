@@ -1,8 +1,9 @@
 import pygame
 from pygame.locals import RESIZABLE
-import AntClass as Ant
-import AntPheromoneClass as ph
-import numpy as np
+import antburrow
+import antlist
+import burrowlist
+from pheromonearray import PheromoneArray
 
 
 class AntGame:
@@ -33,12 +34,12 @@ class Model:
     """
 
     def __init__(self, game):
-        self.antlist = Ant.AntList()
-        self.burrowlist = Ant.BurrowList()
-        self.pheromones = ph.PheromoneArray(game.view.width, game.view.height)
+        self.antlist = antlist.AntList()
+        self.burrowlist = burrowlist.BurrowList()
+        self.pheromones = PheromoneArray(game.view.width, game.view.height)
 
         # start with one nest
-        Ant.AntBurrow([100, 100], game, self)
+        antburrow.AntBurrow([100, 100], game, self)
 
     def update(self):
         for ant in self.antlist:
@@ -133,7 +134,7 @@ class Controller:
                 window.view.screen = pygame.display.set_mode((event.w, event.h), RESIZABLE)
                 window.view.width = event.w
                 window.view.height = event.h
-                window.model.pheromones.resize(event.w,event.h)
+                window.model.pheromones.resize(event.w, event.h)
 
 
 

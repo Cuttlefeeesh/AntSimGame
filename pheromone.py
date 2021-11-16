@@ -1,6 +1,4 @@
 import numpy as np
-import pygame
-from pygame.locals import RESIZABLE
 import scipy.ndimage.filters
 
 
@@ -69,64 +67,4 @@ class Pheromone:
         return self.array
 
 
-class PheromoneArray(Pheromone):
-    """
-    An array that contains the concentration of all pheromones and food at every pixel
-    """
 
-    def __init__(self, width, height):
-
-        Pheromone.__init__(self, width, height, 3)
-
-        self.red = Pheromone(width, height)
-        self.green = Pheromone(width, height, 0, 1)  # Food
-        self.blue = Pheromone(width, height)
-
-        self.phlist = [self.red, self.green, self.blue]
-        self.refresh()
-
-    def decay(self):
-        for ph in self.phlist:
-            ph.decay()
-
-    def refresh(self):
-        self.array = np.stack([self.red.array, self.green.array, self.blue.array], 2)
-        return self.array
-
-    def draw(self, pixels: list, color: tuple):
-        i = 0
-        for ph in self.phlist:
-            ph.draw(pixels, color[i])
-            i += 1
-        self.refresh()
-
-    def resize(self, w, h):
-        for ph in self.phlist:
-            ph.resize(w, h)
-        self.refresh()
-
-
-if __name__ == '__main__':
-    done: bool = False
-    screen = pygame.display.set_mode((500, 500), RESIZABLE)
-    ph = PheromoneArray(500, 500)
-    ph.draw([(10, 10), (10, 11), (11, 10), (11, 11)], (255, 255, 255))
-    i = 0
-    while not done:
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                done = True
-            elif event.type == pygame.locals.VIDEORESIZE:
-                screen = pygame.display.set_mode((event.w, event.h), RESIZABLE)
-                ph.resize(event.w, event.h)
-
-        ph.decay()
-        ph.draw([(np.random.randint(0, 500), np.random.randint(0, 500))],
-                (np.random.randint(0, 256), np.random.randint(0, 256), np.random.randint(0, 256)))
-        if i < ph.width:
-            ph.draw([(i, 15)], (255, 0, 0))
-            ph.draw([(i, 16)], (0, 255, 0))
-            ph.draw([(i, 17)], (0, 0, 255))
-        i = i + 1
-        pygame.surfarray.blit_array(screen, ph.array)
-        pygame.display.flip()
