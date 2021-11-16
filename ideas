@@ -14,5 +14,8 @@ they fade over time (same rate??)
 Ants with food turn towards searching for food pheromone
 ants without food turn towards reporting food pheromones
 there is still a little wiggle to their walk so they optimize the path
+blue: searching
+red: found food
+green: food
 
 later todos: obstacles for them to go around? more ant nests to fight? starvation?

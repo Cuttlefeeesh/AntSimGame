@@ -35,7 +35,7 @@ class Model:
     def __init__(self, game):
         self.antlist = Ant.AntList()
         self.burrowlist = Ant.BurrowList()
-        self.pheromones = ph.AntPheromone(game.view.width,game.view.height)
+        self.pheromones = ph.PheromoneArray(game.view.width, game.view.height)
 
         # start with one nest
         Ant.AntBurrow([100, 100], game, self)
