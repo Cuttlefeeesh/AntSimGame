@@ -20,3 +20,4 @@ class Model:
     def update(self):
         for ant in self.antlist:
             ant.update()
+        self.pheromones.decay()

@@ -1,5 +1,5 @@
 import pygame
-from pygame import RESIZABLE, MOUSEMOTION, MOUSEBUTTONUP, MOUSEWHEEL
+from pygame import RESIZABLE, MOUSEMOTION, MOUSEWHEEL
 
 
 class Controller:
@@ -8,7 +8,7 @@ class Controller:
     """
 
     def __init__(self):
-        self.brushsize=3
+        self.brushsize = 3
 
     def check_input(self, window):
         """
@@ -31,15 +31,14 @@ class Controller:
                 if pygame.mouse.get_pressed()[0]:  # left mouse button click
                     pos = pygame.mouse.get_pos()
                     clb = [b for b in window.model.burrowlist if b.rect.collidepoint(pos)]
-                    if len(clb)>0:
+                    if len(clb) > 0:
                         for b in clb:
                             b.spawn_ant()
                     else:
-                        #window.model.pheromones.draw([pos],(0,255,0))
-                        window.model.pheromones.drawsquare(pos,self.brushsize,(0,255,0))
+                        # window.model.pheromones.draw([pos],(0,255,0))
+                        window.model.pheromones.drawsquare(pos, self.brushsize, (0, 255, 0))
             elif event.type == MOUSEWHEEL:
-                self.brushsize = max(self.brushsize + event.y,1)
-                print(self.brushsize)
+                self.brushsize = max(self.brushsize + event.y, 1)
             elif event.type == MOUSEMOTION:
                 if event.buttons[0]:
                     pos = pygame.mouse.get_pos()

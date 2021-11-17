@@ -66,5 +66,36 @@ class Pheromone:
 
         return self.array
 
+    def sniff(self,range:list):
+        """
+        smell the pheromones at a list of positions
+        :param range: list of positions to sample
+        :return: list of pheromone values at each position
+        """
+        smells = []
+        for pos in range:
+            smells.append(self.array[pos[0]-1,pos[1]-1,:])
+        return smells
+
+    def add(self,pos:tuple, color:tuple):
+        """
+        add pheromones to a single pixel location
+        :param pos: (x,y)
+        :param color: (R,G,B) on 0-255 scale
+        """
+        now=np.asarray(self.sniff([pos])[0])
+        color = np.asarray((color))
+        newcolor = []
+        for i in range(len(now)):
+            newcolor.append(min(255,now[i]+color[i]))
+            i+=1
+        self.draw([pos],newcolor)
+
+
+
+
+
+
+
 
 

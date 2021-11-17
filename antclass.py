@@ -31,6 +31,7 @@ class Ant(pygame.sprite.Sprite):
             self.velocity = self.velocity * (
                         self.speed / speed)  # if velocity has exceeded top speed, cap it at top speed
 
+        # bounce off the walls
         if self.xpos[0] + self.velocity[0] >= game.view.width or self.xpos[0] + self.velocity[0] <= 0:
             self.velocity[0] = -1 * self.velocity[0]
         if self.xpos[1] + self.velocity[1] >= game.view.height or self.xpos[1] + self.velocity[1] <= 0:
@@ -53,5 +54,11 @@ class Ant(pygame.sprite.Sprite):
         state machine to determine behavior
         updates position of ant
         """
-        self.wander(self.game)
+        hungry = True
+
+        if hungry:
+            self.game.model.pheromones.add((self.pos),(0,0,255))
+            self.wander(self.game)
+
+
         self.move()
