@@ -17,6 +17,7 @@ class AntBurrow(pygame.sprite.Sprite):
         self.size = 7  # length of side in pixels
         self.model = model
         self.game = game
+        self.rect = pygame.Rect(self.x, self.y, self.size, self.size)
 
         self.spawn_ant()  # start with one ant
 
