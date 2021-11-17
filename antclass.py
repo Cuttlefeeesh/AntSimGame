@@ -29,7 +29,7 @@ class Ant(pygame.sprite.Sprite):
         speed = np.linalg.norm(self.velocity)  # magnitude of the velocity
         if speed > self.speed:
             self.velocity = self.velocity * (
-                        self.speed / speed)  # if velocity has exceeded top speed, cap it at top speed
+                    self.speed / speed)  # if velocity has exceeded top speed, cap it at top speed
 
         # bounce off the walls
         if self.xpos[0] + self.velocity[0] >= game.view.width or self.xpos[0] + self.velocity[0] <= 0:
@@ -57,8 +57,7 @@ class Ant(pygame.sprite.Sprite):
         hungry = True
 
         if hungry:
-            self.game.model.pheromones.add((self.pos),(0,0,255))
+            self.game.model.pheromones.add(self.pos, (0, 0, 255))
             self.wander(self.game)
-
 
         self.move()

@@ -38,18 +38,32 @@ class PheromoneArray(Pheromone):
             ph.resize(w, h)
         self.refresh()
 
-    def drawsquare(self,pos:tuple,size:int,color:tuple):
+    def drawsquare(self, pos: tuple, size: int, color: tuple):
         """
+        :param color: (R,G,B)
         :param pos: (x,y) pixel position
         :param size: width of square (preferably even)
         """
         if size == 1:
             plist = [pos]
         else:
-            add = round((size-1)/2) #round down to an even number
+            add = round((size - 1) / 2)  # round down to an even number
             plist = []
-            for x in range(pos[0]-add,pos[0]+add):
-                for y in range(pos[1]-add,pos[1]+add):
-                    plist.append((x,y))
-        self.draw(plist,color)
+            for x in range(pos[0] - add, pos[0] + add):
+                for y in range(pos[1] - add, pos[1] + add):
+                    plist.append((x, y))
+        self.draw(plist, color)
 
+    def add(self, pos: tuple, color: tuple):
+        """
+        add pheromones to a single pixel location
+        :param pos: (x,y)
+        :param color: (R,G,B) on 0-255 scale
+        """
+        now = np.asarray(self.sniff([pos])[0])
+        color = np.asarray(color)
+        newcolor = []
+        for i in range(len(now)):
+            newcolor.append(min(255, now[i] + color[i]))
+            i += 1
+        self.draw([pos], tuple(newcolor))
