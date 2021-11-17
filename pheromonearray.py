@@ -37,3 +37,19 @@ class PheromoneArray(Pheromone):
         for ph in self.phlist:
             ph.resize(w, h)
         self.refresh()
+
+    def drawsquare(self,pos:tuple,size:int,color:tuple):
+        """
+        :param pos: (x,y) pixel position
+        :param size: width of square (preferably even)
+        """
+        if size == 1:
+            plist = [pos]
+        else:
+            add = round((size-1)/2) #round down to an even number
+            plist = []
+            for x in range(pos[0]-add,pos[0]+add):
+                for y in range(pos[1]-add,pos[1]+add):
+                    plist.append((x,y))
+        self.draw(plist,color)
+
